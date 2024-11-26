@@ -1,6 +1,5 @@
 package com.java.librarymanagement.users.service;
 
-
 import com.java.librarymanagement.constants.UserConstants;
 import com.java.librarymanagement.users.model.User;
 import com.java.librarymanagement.users.repository.UserRepository;
@@ -28,16 +27,21 @@ public class UserService implements IUserService{
 
     @Override
     public User findById(long id) throws Exception {
-        //TODO: Handle Not Found Exception with its own http codes.
         return usersRepository.findById(id)
                 .orElseThrow(()->new Exception(UserConstants.NOT_FOUND));
     }
 
     @Override
-    public String update(@NonNull User user) {
-        //TODO: Validate for update
-        usersRepository.save(user);
-        return UserConstants.UPDATE_SUCCESSFUL;
+    public String update(long id, @NonNull User user) {
+        try {
+            User selectedUser = findById(id);
+            selectedUser.setName(user.getName());
+            selectedUser.setCourse(user.getCourse());
+            usersRepository.save(selectedUser);
+            return UserConstants.UPDATE_SUCCESSFUL;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
