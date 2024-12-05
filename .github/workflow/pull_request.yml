@@ -1,0 +1,108 @@
+name: Comprehensive PR Approval Workflow
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+      - dev
+      - qa
+      - uat
+
+jobs:
+  require-approvals:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Advanced PR Reviews Check
+        uses: actions/github-script@v7
+        id: review-validation
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            // Logging utility
+            const logVerbose = (message) => {
+              console.log(`[VERBOSE] ${message}`);
+            };
+
+            // Fetch PR details
+            const prNumber = context.issue.number;
+            logVerbose(`Checking PR #${prNumber}`);
+
+            // Fetch reviews
+            const reviewsResponse = await github.rest.pulls.listReviews({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: prNumber
+            });
+
+            // Fetch PR comments
+            const commentsResponse = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: prNumber
+            });
+
+            // Analyze reviews
+            const approvals = reviewsResponse.data.filter(
+              review => review.state === 'APPROVED'
+            );
+
+            // Get unique approvers
+            const uniqueApprovers = new Set(
+              approvals.map(review => review.user.login)
+            );
+
+            // Check unresolved comments
+            const unresolvedComments = commentsResponse.data.filter(
+              comment => !comment.resolved // Use custom logic for unresolved comments if required
+            );
+
+            // Detailed logging
+            logVerbose(`Unique Approvers: ${Array.from(uniqueApprovers).join(', ')}`);
+            logVerbose(`Unresolved Comments: ${unresolvedComments.length}`);
+
+            // Validation checks
+            const failureReasons = [];
+
+            // Check unique approvals
+            if (uniqueApprovers.size < 2) {
+              failureReasons.push(`Insufficient unique approvals. Required: 2, Current: ${uniqueApprovers.size}`);
+            }
+
+            // Check unresolved comments
+            if (unresolvedComments.length > 0) {
+              failureReasons.push(`Unresolved comments exist: ${unresolvedComments.length}`);
+            }
+
+            // Prevent PR author approval
+            const prAuthor = context.payload.pull_request.user.login;
+            const authorApprovals = approvals.filter(
+              review => review.user.login === prAuthor
+            );
+
+            if (authorApprovals.length > 0) {
+              failureReasons.push('PR author cannot approve their own PR');
+            }
+
+            // Final validation
+            if (failureReasons.length > 0) {
+              core.setFailed(failureReasons.join('. '));
+              return {
+                approved: false,
+                reasons: failureReasons
+              };
+            }
+
+            return {
+              approved: true,
+              approversCount: uniqueApprovers.size
+            };
+
+      - name: Workflow Completion Log
+        if: always()
+        run: |
+          echo "Workflow Status: ${{ job.status }}"
