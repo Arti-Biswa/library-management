@@ -20,5 +20,16 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
 
-
+    /**
+     * Handles the authentication for the user provided credentials.
+     *
+     * @param authRequest The authentication credentials containing object
+     * @return The access keys and refresh keys for the associated authenticated user.
+     */
+    @PostMapping
+    public ResponseEntity<RestResponse> login(@RequestBody AuthRequest authRequest) {
+        HashMap<String, Object> listHashMap = new HashMap<>();
+        listHashMap.put("access_token", loginService.authenticate(authRequest));
+        return RestHelper.responseSuccess(listHashMap);
+    }
 }
