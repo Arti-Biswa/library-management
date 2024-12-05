@@ -20,6 +20,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @GetMapping("/self")
+    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    public ResponseEntity<RestResponse> fetchSelfInfo() {
+        HashMap<String, Object> listHashMap = new HashMap<>();
+        listHashMap.put("user", userService.fetchSelfInfo());
+        return RestHelper.responseSuccess(listHashMap);
+    }
     /**
      * Signing up the new user.
      *
@@ -34,3 +41,4 @@ public class UserController {
     }
 
 }
+

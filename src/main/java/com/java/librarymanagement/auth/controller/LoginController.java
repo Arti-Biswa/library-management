@@ -32,4 +32,5 @@ public class LoginController {
         listHashMap.put("access_token", loginService.authenticate(authRequest));
         return RestHelper.responseSuccess(listHashMap);
     }
+
 }
