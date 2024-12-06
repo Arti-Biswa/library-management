@@ -27,6 +27,7 @@ public class UserController {
         listHashMap.put("user", userService.fetchSelfInfo());
         return RestHelper.responseSuccess(listHashMap);
     }
+
     /**
      * Signing up the new user.
      *
