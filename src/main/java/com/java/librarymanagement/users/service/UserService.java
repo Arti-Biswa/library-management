@@ -103,4 +103,13 @@ public class UserService implements IUserService {
         return String.format(DELETED_SUCCESSFULLY_MESSAGE, USER);
     }
 
+
+    public List<User> getAllUsers() {
+        return findAll(); // Fetches all users from the database
+    }
+
+    public User getUserById(long id) throws Exception {
+        return findById(id); // Fetches a user by their ID
+    }
+
 }
