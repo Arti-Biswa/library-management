@@ -1,6 +1,5 @@
 package com.java.librarymanagement.utils.exception;
 
-
 import com.java.librarymanagement.utils.RestResponse;
 import org.springframework.http.ResponseEntity;
 
@@ -29,7 +28,7 @@ public interface IGlobalException {
     default RestResponse setErrorResponse(Exception exception) {
         RestResponse restResponse = new RestResponse();
         restResponse.setStatus(false);
-        restResponse.setError(exception.getMessage());
+        restResponse.setMessage(exception.getMessage());
         return restResponse;
     }
 }

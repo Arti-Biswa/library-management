@@ -1,4 +1,4 @@
-package com.java.librarymanagement.utils;
+package com.company.coursemanager.utils;
 
 import org.springframework.lang.NonNull;
 
@@ -27,7 +27,7 @@ public interface IGenericCrudService<T, E> {
      * @param id The unique identifier of the entity created
      * @return The entity object matching its id
      */
-    E findById(long id) throws Exception;
+    E fetchById(long id) throws Exception;
 
     /**
      * Updates the entity
@@ -35,7 +35,7 @@ public interface IGenericCrudService<T, E> {
      * @param id     The unique identifier of the entity
      * @param entity The entity object containing updated values
      */
-    String update(long id, @NonNull T entity);
+    String update(long id, @NonNull E entity);
 
     /**
      * Delete the entity by id.
