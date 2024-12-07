@@ -1,6 +1,5 @@
 package com.java.librarymanagement.users.service;
 
-
 import com.java.librarymanagement.auth.helper.UserInfoDetails;
 import com.java.librarymanagement.users.mapper.UserMapper;
 import com.java.librarymanagement.users.model.User;
@@ -9,6 +8,7 @@ import com.java.librarymanagement.users.repository.UserRepository;
 import com.java.librarymanagement.utils.exception.GlobalExceptionWrapper;
 import jakarta.transaction.Transactional;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,9 +21,8 @@ import java.util.Optional;
 
 import static com.java.librarymanagement.utils.constants.UserConstants.*;
 
-
 @Service
-public class UserService implements IUserService {
+public class UserService implements IUserService{
 
     @Autowired
     private PasswordEncoder encoder;
@@ -52,64 +51,69 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserDTO findById(long id) {
-        User user = this.userRepository.findById(id).orElseThrow(
-                () -> new GlobalExceptionWrapper.NotFoundException(String.format(NOT_FOUND_MESSAGE, USER.toLowerCase())));
+    public UserDTO fetchById(long id) {
+        User user = findById(id);
         return UserMapper.toDTO(user);
     }
 
-    public UserDTO fetchSelfInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = ((UserInfoDetails) authentication.getPrincipal()).getUsername();
-        return findByEmail(email).orElseThrow(
-                () -> new GlobalExceptionWrapper.NotFoundException(String.format(NOT_FOUND_MESSAGE, USER.toLowerCase())));
-    }
-
-    public Optional<UserDTO> findByEmail(@NonNull String emailId) {
-        Optional<User> user = this.userRepository.findByEmail(emailId);
-        return UserMapper.toDTO(user);
+    private User findById(long id) {
+        return this.userRepository.findById(id).orElseThrow(
+                () -> new GlobalExceptionWrapper.NotFoundException(String.format(NOT_FOUND_MESSAGE,
+                        USER.toLowerCase())));
     }
 
     @Override
-    public String update(long id, @NonNull User entity) {
-        UserDTO authenticatedUser = fetchSelfInfo();
-        User userEntity = UserMapper.toEntity(authenticatedUser);
+    public User fetchSelfInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = ((UserInfoDetails) authentication.getPrincipal()).getUsername();
+        return findByEmail(email).orElseThrow(
+                () -> new GlobalExceptionWrapper.NotFoundException(String.format(NOT_FOUND_MESSAGE,
+                        USER.toLowerCase())));
+    }
+
+    public Optional<User> findByEmail(@NonNull String emailId) {
+        return this.userRepository.findByEmail(emailId);
+    }
+
+    @Override
+    public String update(long id, @NonNull UserDTO userDTO) {
+        User authenticatedUser = fetchSelfInfo();
 
         //Allow update by admin to the instructor info.
-        if (Arrays.stream(authenticatedUser.getRoles().split(",")).anyMatch(role -> role.trim().equalsIgnoreCase("ADMIN"))) {
-            userEntity = UserMapper.toEntity(findById(id));
+        if (Arrays.stream(authenticatedUser.getRoles().split(",")).anyMatch(role -> role.trim().equalsIgnoreCase(
+                "ADMIN"))) {
+            authenticatedUser = findById(id);
         }
 
-        userEntity.setCourse(entity.getCourse());
-        userEntity.setName(entity.getName());
-        userEntity.setPhoneNumber(entity.getPhoneNumber());
+        if (StringUtils.isNotBlank(userDTO.getCourse())) {
+            authenticatedUser.setCourse(userDTO.getCourse());
+        }
 
-        this.userRepository.save(userEntity);
+        if (StringUtils.isNotBlank(userDTO.getName())) {
+            authenticatedUser.setName(userDTO.getName());
+        }
+
+        if (userDTO.getPhoneNumber() != null && userDTO.getPhoneNumber() > 0) {
+            authenticatedUser.setPhoneNumber(String.valueOf(userDTO.getPhoneNumber()));
+        }
+
+        this.userRepository.save(authenticatedUser);
         return String.format(UPDATED_SUCCESSFULLY_MESSAGE, USER);
     }
 
     @Override
     @Transactional
     public String deleteById(long id) {
-        UserDTO authenticatedUser = fetchSelfInfo();
-        User userEntity = UserMapper.toEntity(authenticatedUser);
+        User authenticatedUser = fetchSelfInfo();
 
         //Allow to delete by admin to the instructor info.
-        if (Arrays.stream(authenticatedUser.getRoles().split(",")).anyMatch(role -> role.trim().equalsIgnoreCase("ADMIN"))) {
-            userEntity = UserMapper.toEntity(findById(id));
+        if (Arrays.stream(authenticatedUser.getRoles().split(",")).anyMatch(role -> role.trim().equalsIgnoreCase(
+                "ADMIN"))) {
+            authenticatedUser = findById(id);
         }
 
-        this.userRepository.deleteById(userEntity.getId());
+        this.userRepository.deleteById(authenticatedUser.getId());
         return String.format(DELETED_SUCCESSFULLY_MESSAGE, USER);
-    }
-
-
-    public List<User> getAllUsers() {
-        return findAll(); // Fetches all users from the database
-    }
-
-    public User getUserById(long id) throws Exception {
-        return findById(id); // Fetches a user by their ID
     }
 
 }
