@@ -44,7 +44,7 @@ public class UserService implements IUserService{
         }
 
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setRoles("LIBRARIAN");
+        user.setRoles("USER");
         User savedUser = this.userRepository.save(user);
 
         return UserMapper.toDTO(savedUser);

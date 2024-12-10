@@ -1,5 +1,6 @@
 package com.java.librarymanagement.auth.helper;
 
+
 import com.java.librarymanagement.users.model.User;
 import com.java.librarymanagement.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class UserInfoService implements UserDetailsService {
         Optional<User> userDetail = userRepository.findByEmail(username); // Assuming 'email' is used as username
 
         // Converting UserInfo to UserDetails
-        return userDetail.map(com.java.librarymanagement.auth.helper.UserInfoDetails::new)
+        return userDetail.map(UserInfoDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
     }
 
