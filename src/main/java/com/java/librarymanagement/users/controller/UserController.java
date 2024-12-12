@@ -23,13 +23,37 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/self")
-    @PreAuthorize("hasAuthority('LIBRARIAN')")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     public ResponseEntity<RestResponse> fetchSelfInfo() {
         HashMap<String, Object> listHashMap = new HashMap<>();
         listHashMap.put("user", userService.fetchSelfInfo());
         return RestHelper.responseSuccess(listHashMap);
     }
-
+    /**
+     * Fetches the user by identifier.
+     *
+     * @param id The unique identifier of the user.
+     * @return The user entity.
+     */
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> findById(@PathVariable long id) {
+        HashMap<String, Object> listHashMap = new HashMap<>();
+        listHashMap.put("user", userService.fetchById(id));
+        return RestHelper.responseSuccess(listHashMap);
+    }
+    /**
+     * Fetches all the user entities in the system.
+     *
+     * @return The list of user entities.
+     */
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> findAll() {
+        HashMap<String, Object> listHashMap = new HashMap<>();
+        listHashMap.put("users", userService.findAll());
+        return RestHelper.responseSuccess(listHashMap);
+    }
     /**
      * Signing up the new user.
      *
