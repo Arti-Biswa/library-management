@@ -41,3 +41,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+bootJar {
+    // Ensure a consistent jar name
+    archiveFileName = 'library-management-backend.jar'
+}

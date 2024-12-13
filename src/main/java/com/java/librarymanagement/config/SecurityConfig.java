@@ -1,6 +1,5 @@
 package com.java.librarymanagement.config;
 
-
 import com.java.librarymanagement.auth.helper.UserInfoService;
 import com.java.librarymanagement.filter.JwtAuthFilter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,9 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login", "/api/v1/auth/sign-up").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users").hasAuthority("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/users/**").hasAnyAuthority("ADMIN", "USER")
+
+         .requestMatchers(HttpMethod.PATCH, "/api/v1/users/**").hasAnyAuthority("ADMIN", "USER")
+
 
                         .anyRequest().authenticated() // Protect all other endpoints
                 )

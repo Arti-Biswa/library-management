@@ -13,7 +13,11 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+
+import java.util.HashMap;
+
         import java.util.HashMap;
+
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -69,6 +73,19 @@ public class UserController {
         listHashMap.put("user", userService.save(user));
         return RestHelper.responseSuccess(listHashMap);
     }
+
+
+    /**
+     * Deletes the user by id.
+     *
+     * @param id The unique identifier of the entity.
+     * @return The message indicating the confirmation on deleted user entity.
+     */
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> delete(@PathVariable long id) {
+        String message = userService.deleteById(id);
+
     /**
      * Updates the existing user entity.
      *
@@ -79,6 +96,7 @@ public class UserController {
     @PreAuthorize("hasAuthority('ADMIN','USER')")
     public ResponseEntity<RestResponse> update(@PathVariable long id, @Validated UserDTO UserDTO) {
         String message = userService.update(id, UserDTO);
+
         return RestHelper.responseMessage(message);
     }
 }
