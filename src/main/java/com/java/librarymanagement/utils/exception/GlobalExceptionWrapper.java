@@ -80,4 +80,26 @@ public class GlobalExceptionWrapper {
             this.exception = exception;
         }
     }
+
+    /**
+     * Returns the forbidden exception with the given message and forbidden http status code
+     */
+    @Getter
+    public static class ForbiddenException extends RuntimeException implements IGlobalException {
+
+        private final HttpStatus httpStatus;
+
+        public ForbiddenException(String message) {
+            super(message);
+            this.httpStatus = HttpStatus.FORBIDDEN;
+        }
+
+        @Override
+        public ResponseEntity<RestResponse> getResponse(Exception exception) {
+            RestResponse errorResponse = setErrorResponse(exception);
+            return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+        }
+    }
+
+
 }
