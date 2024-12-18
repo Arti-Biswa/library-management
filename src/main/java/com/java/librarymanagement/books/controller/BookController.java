@@ -36,5 +36,17 @@ public class BookController {
         responseMap.put("book", savedBookDTO);
         return RestHelper.responseSuccess(responseMap);
     }
+    /**
+     * Fetches all the user entities in the system.
+     *
+     * @return The list of user entities.
+     */
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> findAll() {
+        HashMap<String, Object> listHashMap = new HashMap<>();
+        listHashMap.put("book", bookService.findAll());
+        return RestHelper.responseSuccess(listHashMap);
+    }
 }
 
