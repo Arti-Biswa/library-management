@@ -48,6 +48,7 @@ public class BookController {
         listHashMap.put("book", bookService.findAll());
         return RestHelper.responseSuccess(listHashMap);
     }
+
     /**
      * Deletes the user by id.
      *
