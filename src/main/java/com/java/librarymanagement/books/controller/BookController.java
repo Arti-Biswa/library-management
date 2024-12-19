@@ -48,5 +48,18 @@ public class BookController {
         listHashMap.put("book", bookService.findAll());
         return RestHelper.responseSuccess(listHashMap);
     }
+
+    /**
+     * Deletes the user by id.
+     *
+     * @param id The unique identifier of the entity.
+     * @return The message indicating the confirmation on deleted user entity.
+     */
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> delete(@PathVariable long id) {
+        String message = bookService.deleteById(id);
+        return RestHelper.responseMessage(message);
+    }
 }
 
