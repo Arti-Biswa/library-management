@@ -86,6 +86,9 @@ public class UserController {
     public ResponseEntity<RestResponse> delete(@PathVariable long id) {
         String message = userService.deleteById(id);
 
+        return RestHelper.responseMessage(message);
+    }
+
     /**
      * Updates the existing user entity.
      *

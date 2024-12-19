@@ -36,5 +36,29 @@ public class BookController {
         responseMap.put("book", savedBookDTO);
         return RestHelper.responseSuccess(responseMap);
     }
+    /**
+     * Fetches all the user entities in the system.
+     *
+     * @return The list of user entities.
+     */
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> findAll() {
+        HashMap<String, Object> listHashMap = new HashMap<>();
+        listHashMap.put("book", bookService.findAll());
+        return RestHelper.responseSuccess(listHashMap);
+    }
+    /**
+     * Deletes the user by id.
+     *
+     * @param id The unique identifier of the entity.
+     * @return The message indicating the confirmation on deleted user entity.
+     */
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> delete(@PathVariable long id) {
+        String message = bookService.deleteById(id);
+        return RestHelper.responseMessage(message);
+    }
 }
 
