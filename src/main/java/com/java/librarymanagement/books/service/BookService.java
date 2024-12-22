@@ -54,12 +54,12 @@ public class BookService implements IBookService{
     @Override
     @Transactional
     public String update(long id, @NonNull BookDTO bookDTO) {
-
         User authenticatedUser = userService.fetchSelfInfo();
         if (Arrays.stream(authenticatedUser.getRoles().split(","))
                 .noneMatch(role -> role.trim().equalsIgnoreCase("ADMIN"))) {
             throw new GlobalExceptionWrapper.ForbiddenException("Only admins can update the available copies of books.");
         }
+
         Book book = findById(id);
 
         if (bookDTO.getAvailableCopies() != null) {
@@ -67,8 +67,9 @@ public class BookService implements IBookService{
         } else {
             throw new GlobalExceptionWrapper.BadRequestException("Available copies field is required for update.");
         }
-        this.bookRepository.save(book);
-        return String.format(UPDATED_SUCCESSFULLY_MESSAGE, "book's available copies");
+
+        bookRepository.save(book);
+        return String.format(UPDATED_SUCCESSFULLY_MESSAGE, "Book's available copies");
     }
 
     @Override
