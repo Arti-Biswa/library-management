@@ -40,9 +40,7 @@ public class BookController {
         responseMap.put("book", savedBookDTO);
         return RestHelper.responseSuccess(responseMap);
     }
-<<<<<<< HEAD
-=======
-    /**
+
      * Fetches all the user entities in the system.
      *
      * @return The list of user entities.
@@ -54,6 +52,10 @@ public class BookController {
         listHashMap.put("book", bookService.findAll());
         return RestHelper.responseSuccess(listHashMap);
     }
+
+
+
+
     /**
      * Deletes the user by id.
      *
@@ -91,6 +93,8 @@ public class BookController {
         return RestHelper.responseMessage(message);
     }
 
->>>>>>> f5c78ff (LMS-19:Implemented update API for the book entity)
+
+
+
 }
 
