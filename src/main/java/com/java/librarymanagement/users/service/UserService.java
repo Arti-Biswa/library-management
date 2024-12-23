@@ -22,7 +22,7 @@ import java.util.Optional;
 import static com.java.librarymanagement.utils.constants.UserConstants.*;
 
 @Service
-public class UserService implements IUserService{
+public class UserService implements IUserService {
 
     @Autowired
     private PasswordEncoder encoder;
@@ -92,11 +92,9 @@ public class UserService implements IUserService{
         if (StringUtils.isNotBlank(userDTO.getName())) {
             authenticatedUser.setName(userDTO.getName());
         }
-
         if (userDTO.getPhoneNumber() != null && userDTO.getPhoneNumber() > 0) {
-            authenticatedUser.setPhoneNumber(String.valueOf(userDTO.getPhoneNumber()));
+            authenticatedUser.setPhoneNumber(userDTO.getPhoneNumber());
         }
-
         this.userRepository.save(authenticatedUser);
         return String.format(UPDATED_SUCCESSFULLY_MESSAGE, USER);
     }

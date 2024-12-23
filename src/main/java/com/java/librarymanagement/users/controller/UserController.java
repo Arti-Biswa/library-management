@@ -2,18 +2,22 @@ package com.java.librarymanagement.users.controller;
 
 
 import com.java.librarymanagement.users.model.User;
+import com.java.librarymanagement.users.model.UserDTO;
 import com.java.librarymanagement.users.service.UserService;
 import com.java.librarymanagement.utils.RestHelper;
 import com.java.librarymanagement.utils.RestResponse;
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 import java.util.HashMap;
+
+        import java.util.HashMap;
+
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -29,6 +33,7 @@ public class UserController {
         listHashMap.put("user", userService.fetchSelfInfo());
         return RestHelper.responseSuccess(listHashMap);
     }
+
     /**
      * Fetches the user by identifier.
      *
@@ -42,6 +47,7 @@ public class UserController {
         listHashMap.put("user", userService.fetchById(id));
         return RestHelper.responseSuccess(listHashMap);
     }
+
     /**
      * Fetches all the user entities in the system.
      *
@@ -54,6 +60,7 @@ public class UserController {
         listHashMap.put("users", userService.findAll());
         return RestHelper.responseSuccess(listHashMap);
     }
+
     /**
      * Signing up the new user.
      *
@@ -67,6 +74,31 @@ public class UserController {
         return RestHelper.responseSuccess(listHashMap);
     }
 
+
+    /**
+     * Deletes the user by id.
+     *
+     * @param id The unique identifier of the entity.
+     * @return The message indicating the confirmation on deleted user entity.
+     */
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> delete(@PathVariable long id) {
+        String message = userService.deleteById(id);
+
+        return RestHelper.responseMessage(message);
+    }
+
+    /**
+     * Updates the existing user entity.
+     *
+     * @param id The updated user entity.
+     * @return The message indicating the confirmation on updated user entity.
+     */
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+    public ResponseEntity<RestResponse> update(@PathVariable long id, @Validated UserDTO UserDTO) {
+        String message = userService.update(id, UserDTO);
+        return RestHelper.responseMessage(message);
+    }
 }
-
-
