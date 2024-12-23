@@ -5,6 +5,7 @@ import com.java.librarymanagement.books.model.Book;
 import com.java.librarymanagement.books.model.BookDTO;
 import com.java.librarymanagement.books.repository.BookRepository;
 import com.java.librarymanagement.books.service.BookService;
+import com.java.librarymanagement.users.model.UserDTO;
 import com.java.librarymanagement.utils.RestHelper;
 import com.java.librarymanagement.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,6 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
-
     /**
      * Adding up the new books by admin.
      *
@@ -41,7 +41,6 @@ public class BookController {
         return RestHelper.responseSuccess(responseMap);
     }
 
-    /**
      * Fetches all the user entities in the system.
      *
      * @return The list of user entities.
@@ -90,4 +89,3 @@ public class BookController {
         String message = bookService.update(id, bookDTO);
         return RestHelper.responseMessage(message);
     }
-}
