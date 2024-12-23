@@ -1,23 +1,17 @@
 package com.java.librarymanagement.users.controller;
 
-
 import com.java.librarymanagement.users.model.User;
 import com.java.librarymanagement.users.model.UserDTO;
 import com.java.librarymanagement.users.service.UserService;
 import com.java.librarymanagement.utils.RestHelper;
 import com.java.librarymanagement.utils.RestResponse;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.HashMap;
-
-        import java.util.HashMap;
-
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -96,11 +90,6 @@ public class UserController {
      * @return The message indicating the confirmation on updated user entity.
      */
     @PatchMapping("/{id}")
-
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public ResponseEntity<RestResponse> update(@PathVariable long id, @Validated UserDTO UserDTO) {
-        String message = userService.update(id, UserDTO);
-
     @PreAuthorize("hasAuthority('ADMIN','USER')")
     public ResponseEntity<RestResponse> update(@PathVariable long id, @Validated UserDTO UserDTO) {
         String message = userService.update(id, UserDTO);
