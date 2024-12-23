@@ -96,10 +96,14 @@ public class UserController {
      * @return The message indicating the confirmation on updated user entity.
      */
     @PatchMapping("/{id}")
-    @PreAuthorize("hasAuthority('ADMIN','USER')")
+
+    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
     public ResponseEntity<RestResponse> update(@PathVariable long id, @Validated UserDTO UserDTO) {
         String message = userService.update(id, UserDTO);
 
+    @PreAuthorize("hasAuthority('ADMIN','USER')")
+    public ResponseEntity<RestResponse> update(@PathVariable long id, @Validated UserDTO UserDTO) {
+        String message = userService.update(id, UserDTO);
         return RestHelper.responseMessage(message);
     }
 }

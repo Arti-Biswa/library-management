@@ -53,9 +53,6 @@ public class BookController {
         return RestHelper.responseSuccess(listHashMap);
     }
 
-
-
-
     /**
      * Deletes the user by id.
      *
@@ -92,9 +89,3 @@ public class BookController {
         String message = bookService.update(id, bookDTO);
         return RestHelper.responseMessage(message);
     }
-
-
-
-
-}
-
