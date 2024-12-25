@@ -117,7 +117,7 @@ public class JwtService {
      * @param token The token supplied
      * @return The claims of authenticated user.
      */
-    private Claims extractAllClaims(String token) {
+    public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
                 .build()
