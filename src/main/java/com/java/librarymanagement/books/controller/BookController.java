@@ -5,6 +5,7 @@ import com.java.librarymanagement.books.model.Book;
 import com.java.librarymanagement.books.model.BookDTO;
 import com.java.librarymanagement.books.repository.BookRepository;
 import com.java.librarymanagement.books.service.BookServiceImpl;
+import com.java.librarymanagement.books.service.BookService;
 import com.java.librarymanagement.utils.RestHelper;
 import com.java.librarymanagement.utils.RestResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,7 @@ public class BookController {
         responseMap.put("book", savedBookDTO);
         return RestHelper.responseSuccess(responseMap);
     }
+
 
     /**
      * Fetches all the user entities in the system.
@@ -90,3 +92,54 @@ public class BookController {
     }
 }
 
+
+    /**
+     * Fetches all the user entities in the system.
+     *
+     * @return The list of user entities.
+     */
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> findAll() {
+        HashMap<String, Object> listHashMap = new HashMap<>();
+        listHashMap.put("book", bookService.findAll());
+        return RestHelper.responseSuccess(listHashMap);
+    }
+
+    /**
+     * Deletes the user by id.
+     *
+     * @param id The unique identifier of the entity.
+     * @return The message indicating the confirmation on deleted user entity.
+     */
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> delete(@PathVariable long id) {
+        String message = bookService.deleteById(id);
+        return RestHelper.responseMessage(message);
+    }
+
+    /**
+     * Counts the books in the book entity.
+     *
+     * @return The message indicating the total number of books in book entity.
+     */
+
+    @GetMapping("/count")
+    public long getTotalBooks() {
+        return bookRepository.count();
+    }
+
+    /**
+     * Updates the existing book entity.
+     *
+     * @param id The updated book entity.
+     * @return The message indicating the confirmation on updated book entity.
+     */
+    @PatchMapping("/update/{id}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RestResponse> update(@PathVariable long id, @RequestBody @Validated BookDTO bookDTO) {
+        String message = bookService.update(id, bookDTO);
+        return RestHelper.responseMessage(message);
+    }
+}

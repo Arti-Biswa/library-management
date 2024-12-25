@@ -5,7 +5,6 @@ import com.java.librarymanagement.users.model.UserDTO;
 import com.java.librarymanagement.users.service.UserServiceImpl;
 import com.java.librarymanagement.utils.RestHelper;
 import com.java.librarymanagement.utils.RestResponse;
-import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -82,6 +81,9 @@ public class UserController {
         return RestHelper.responseMessage(message);
     }
 
+        return RestHelper.responseMessage(message);
+    }
+
     /**
      * Updates the existing user entity.
      *
@@ -91,7 +93,11 @@ public class UserController {
     @PatchMapping("/{id}")
     @PreAuthorize("hasAuthority('ADMIN','USER')")
     public ResponseEntity<RestResponse> update(@PathVariable long id, @Validated UserDTO UserDTO) {
+
         String message = userServiceImpl.update(id, UserDTO);
+
+
+        String message = userService.update(id, UserDTO);
 
         return RestHelper.responseMessage(message);
     }

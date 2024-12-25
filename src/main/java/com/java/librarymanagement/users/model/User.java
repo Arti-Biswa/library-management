@@ -34,7 +34,7 @@ public class User extends AuditEntity {
     private String password;
 
     @Column(name = "phone_number")
-    private String phoneNumber; // Changed to String for better compatibility
+    private Integer phoneNumber;
 
     @Column
     private String course;
