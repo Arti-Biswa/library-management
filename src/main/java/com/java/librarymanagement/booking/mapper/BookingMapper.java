@@ -30,14 +30,9 @@ public class BookingMapper {
 
         // Automatically copy properties using BeanUtils
         BeanUtils.copyProperties(booking, dto); // This will copy fields like name, email, course, etc.
-        if(ObjectUtils.isNotEmpty(booking.getUser())){
+        if (ObjectUtils.isNotEmpty(booking.getUser())) {
             dto.setUserId(booking.getUser().getId());
         }
-
-        // Calculate and map fields that require custom logic
-        dto.setOverDue(calculateOverdue(booking.getDueDate())); // Calculate overdue days
-        dto.setFineAmount(calculateFine(dto.getOverDue())); // Calculate fine amount
-
         return dto;
     }
 

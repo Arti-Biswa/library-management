@@ -68,46 +68,4 @@ public class Booking extends AuditEntity {
     // Fine related field
     @Column
     private Double fineAmount = 0D;
-
-    private Long bookId;
-
-    @Column(name = "user_id")
-    private Long userId;
-
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private User users;
-
-    @Column
-    private BigDecimal price;
-
-    @Column
-    private LocalDate borrowedDate;
-
-    @Setter
-    @Getter
-    @Column
-    private LocalDate dueDate;
-
-    @Column
-    private int overDue;
-
-    // Fine related field
-    @Column
-    private BigDecimal fineAmount = BigDecimal.ZERO;
-
-    // Fine calculation logic
-    public void calculateOverdueAndFine(LocalDate currentDate) {
-        if (currentDate.isAfter(dueDate)) {
-            // Calculate overdue days
-            this.overDue = (int) ChronoUnit.DAYS.between(dueDate, currentDate);
-
-            // Fine calculation (e.g., $1 per day overdue)
-            BigDecimal dailyFine = new BigDecimal("1.00"); // Fine per day
-            this.fineAmount = dailyFine.multiply(new BigDecimal(overDue));
-        } else {
-            this.overDue = 0;
-            this.fineAmount = BigDecimal.ZERO; // No fine if not overdue
-        }
-    }
 }
