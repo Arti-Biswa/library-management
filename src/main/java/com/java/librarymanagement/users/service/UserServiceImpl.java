@@ -1,7 +1,7 @@
 package com.java.librarymanagement.users.service;
 
-
-import com.company.coursemanager.utils.IGenericCrudService;
+import com.java.librarymanagement.auth.helper.UserInfoDetails;
+import com.java.librarymanagement.users.mapper.UserMapper;
 import com.java.librarymanagement.users.model.User;
 import com.java.librarymanagement.users.model.UserDTO;
 import com.java.librarymanagement.users.repository.UserRepository;
@@ -22,7 +22,7 @@ import java.util.Optional;
 import static com.java.librarymanagement.utils.constants.UserConstants.*;
 
 @Service
-public class UserService implements IUserService {
+public class UserServiceImpl implements UserService{
 
     @Autowired
     private PasswordEncoder encoder;
@@ -32,8 +32,8 @@ public class UserService implements IUserService {
 
     @Override
     public List<UserDTO> findAll() {
-        List<User> users = this.userRepository.findAll();
-        return UserMapper.toDTO(users);
+        List<User> user = this.userRepository.findAll();
+        return UserMapper.toDTO(user);
     }
 
     @Override
@@ -92,10 +92,17 @@ public class UserService implements IUserService {
         if (StringUtils.isNotBlank(userDTO.getName())) {
             authenticatedUser.setName(userDTO.getName());
         }
+
         if (userDTO.getPhoneNumber() != null && userDTO.getPhoneNumber() > 0) {
-            authenticatedUser.setPhoneNumber(userDTO.getPhoneNumber());
+            authenticatedUser.setPhoneNumber(String.valueOf(userDTO.getPhoneNumber()));
         }
-        this.userRepository.save(authenticatedUser);
+
+        return updateEntity(UserMapper.toEntity(authenticatedUser));
+    }
+
+    @Override
+    public String updateEntity(User user) {
+        this.userRepository.save(user);
         return String.format(UPDATED_SUCCESSFULLY_MESSAGE, USER);
     }
 
@@ -114,21 +121,4 @@ public class UserService implements IUserService {
         return String.format(DELETED_SUCCESSFULLY_MESSAGE, USER);
     }
 
-public interface UserService extends IGenericCrudService<User, UserDTO> {
-
-    /**
-     * Fetches the authenticated instructor info.
-     *
-     * @return The instructor dto
-     */
-    User fetchSelfInfo();
-
-    /**
-     * Updates the user entity.
-     *
-     * @param user The user entity to be updated.
-     * @return The confirmation message on whether the user is updated or not.
-     */
-    String updateEntity(User user);
 }
-

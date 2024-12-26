@@ -52,7 +52,7 @@ public class UserMapper {
      * @param dto The user dto.
      * @return The user entity.
      */
-    public static User toEntity(UserDTO dto) {
+    public static User toEntity(User dto) {
         User user = new User();
         BeanUtils.copyProperties(dto, user);
         return user;
