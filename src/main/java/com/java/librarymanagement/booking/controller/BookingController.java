@@ -22,7 +22,16 @@ public class BookingController {
 
     @Autowired
     private BookingServiceImpl bookingService;
-
+    /**
+     * Creates a new booking.
+     *
+     * This endpoint allows 'ADMIN' users to create a booking by sending a valid `Booking` object in the request body.
+     * Upon success, it returns the borrowed booking details.
+     *
+     * @param booking The booking information to be created.
+     * @return A {@link ResponseEntity} with the saved booking details.
+     *
+     */
     @PostMapping
     @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<RestResponse> save(@Validated @RequestBody Booking booking) {

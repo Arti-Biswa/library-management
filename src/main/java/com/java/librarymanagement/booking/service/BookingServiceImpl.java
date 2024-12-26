@@ -4,6 +4,10 @@ import com.java.librarymanagement.booking.mapper.BookingMapper;
 import com.java.librarymanagement.booking.model.Booking;
 import com.java.librarymanagement.booking.model.BookingDTO;
 import com.java.librarymanagement.booking.repository.BookingRepository;
+import com.java.librarymanagement.users.model.User;
+import com.java.librarymanagement.users.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
@@ -15,6 +19,8 @@ public class BookingServiceImpl implements BookingService {
     @Autowired
     private BookingRepository bookingRepository;
 
+    @Autowired
+    private IUserService userService;
     // Method to update overdue days and fine amounts for all bookings
     public void updateOverdueAndFines(LocalDate currentDate) {
         // Fetch all bookings where the due date is before the current date
@@ -61,6 +67,9 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingDTO save(Booking entity) {
+        User authenticatedUser = userService.fetchSelfInfo();
+        entity.setUser(authenticatedUser);
+        Booking savedBooking = bookingRepository.save(entity);
         Booking savedBooking = bookingRepository.save(entity);
         return BookingMapper.toDTO(savedBooking);
     }

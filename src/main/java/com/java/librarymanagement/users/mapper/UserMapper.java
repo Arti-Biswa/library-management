@@ -27,11 +27,11 @@ public class UserMapper {
     /**
      * Maps the list of users to user dto
      *
-     * @param user The list of user entity
+     * @param users The list of user entity
      * @return The list of user dto.
      */
-    public static List<UserDTO> toDTO(List<User> user) {
-        return user.stream()
+    public static List<UserDTO> toDTO(List<User> users) {
+        return users.stream()
                 .map(UserMapper::toDTO)
                 .collect(Collectors.toList());
     }

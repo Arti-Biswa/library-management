@@ -5,6 +5,7 @@ import com.java.librarymanagement.booking.model.BookingDTO;
 import com.java.librarymanagement.books.mapper.BookMapper;
 import com.java.librarymanagement.books.model.Book;
 import com.java.librarymanagement.books.model.BookDTO;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
@@ -29,6 +30,9 @@ public class BookingMapper {
 
         // Automatically copy properties using BeanUtils
         BeanUtils.copyProperties(booking, dto); // This will copy fields like name, email, course, etc.
+        if(ObjectUtils.isNotEmpty(booking.getUser())){
+            dto.setUserId(booking.getUser().getId());
+        }
 
         // Calculate and map fields that require custom logic
         dto.setOverDue(calculateOverdue(booking.getDueDate())); // Calculate overdue days
