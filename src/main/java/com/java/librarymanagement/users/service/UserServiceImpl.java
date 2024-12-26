@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService{
         }
 
         if (userDTO.getPhoneNumber() != null && userDTO.getPhoneNumber() > 0) {
-            authenticatedUser.setPhoneNumber(String.valueOf(userDTO.getPhoneNumber()));
+            authenticatedUser.setPhoneNumber(Double.valueOf(userDTO.getPhoneNumber()));
         }
 
         return updateEntity(UserMapper.toEntity(authenticatedUser));
@@ -120,5 +120,4 @@ public class UserServiceImpl implements UserService{
         this.userRepository.deleteById(authenticatedUser.getId());
         return String.format(DELETED_SUCCESSFULLY_MESSAGE, USER);
     }
-
 }
