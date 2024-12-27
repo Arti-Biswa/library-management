@@ -1,4 +1,4 @@
-package com.company.coursemanager.utils;
+package com.java.librarymanagement.utils;
 
 import org.springframework.lang.NonNull;
 
