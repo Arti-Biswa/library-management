@@ -1,11 +1,11 @@
 package com.java.librarymanagement.users.controller;
 
-
 import com.java.librarymanagement.users.model.User;
 import com.java.librarymanagement.users.model.UserDTO;
 import com.java.librarymanagement.users.service.UserServiceImpl;
 import com.java.librarymanagement.utils.RestHelper;
 import com.java.librarymanagement.utils.RestResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 
 @RestController
+@Tag(name = "User Management")
 @RequestMapping("/api/v1/users")
 public class UserController {
 
