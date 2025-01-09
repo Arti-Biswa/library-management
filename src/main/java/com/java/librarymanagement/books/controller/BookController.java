@@ -8,6 +8,7 @@ import com.java.librarymanagement.books.service.BookServiceImpl;
 import com.java.librarymanagement.books.service.BookService;
 import com.java.librarymanagement.utils.RestHelper;
 import com.java.librarymanagement.utils.RestResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 
 @RestController
+@Tag(name = "Book Management")
 @RequestMapping("/api/v1/books")
 public class BookController {
 

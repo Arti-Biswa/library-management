@@ -6,7 +6,11 @@ import com.java.librarymanagement.booking.model.BookingDTO;
 import com.java.librarymanagement.booking.service.BookingServiceImpl;
 import com.java.librarymanagement.utils.RestHelper;
 import com.java.librarymanagement.utils.RestResponse;
+
 import lombok.NonNull;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 
 @RestController
+@Tag(name = "Booking Management")
 @RequestMapping("/api/bookings")
 public class BookingController {
 

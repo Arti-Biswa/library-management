@@ -44,6 +44,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/users").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/users").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/users/**").hasAnyAuthority("ADMIN", "USER")
+                        .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/webjars/**", "/swagger-resources/**").permitAll()
 
                         .anyRequest().authenticated() // Protect all other endpoints
                 )
