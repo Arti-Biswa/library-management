@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService{
         return UserMapper.toDTO(user);
     }
 
-    private User findById(long id) {
+    public User findById(long id) {
         return this.userRepository.findById(id).orElseThrow(
                 () -> new GlobalExceptionWrapper.NotFoundException(String.format(NOT_FOUND_MESSAGE,
                         USER.toLowerCase())));
