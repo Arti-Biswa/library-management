@@ -1,5 +1,7 @@
 package com.java.librarymanagement.users.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.java.librarymanagement.utils.AuditEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -41,4 +43,10 @@ public class User extends AuditEntity {
 
     @Column
     private String roles;
+
+    @JsonCreator
+    public User(@JsonProperty("id") long id) {
+        this.id = id;
+    }
+
 }
